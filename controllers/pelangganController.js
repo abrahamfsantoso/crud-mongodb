@@ -1,18 +1,17 @@
 const client = require("../models");
 const { ObjectId } = require("mongodb");
 
-
-class TransaksiController {
+class PelangganController {
   async getAll(req, res) {
     try {
       const dbConnection = client.db("penjualan");
-      const transaksi = dbConnection.collection("transaksi");
+      const pelanggan = dbConnection.collection("pelanggan");
 
-      let data = await transaksi.find({}).toArray();
+      let data = await pelanggan.find({}).toArray();
 
       if (data.length === 0) {
         return res.status(404).json({
-          message: "Transaksi Not Found",
+          message: "Pelanggan Not Found",
         });
       }
       return res.status(200).json({
@@ -29,8 +28,10 @@ class TransaksiController {
   // Get One Data
   async getOne(req, res) {
     try {
+      const dbConnection = client.db("penjualan");
+      const pelanggan = dbConnection.collection("pelanggan");
       // Find one data
-      let data = await transaksi.findOne({
+      let data = await pelanggan.findOne({
         _id: new ObjectId(req.params.id),
       });
 
@@ -40,6 +41,7 @@ class TransaksiController {
         data,
       });
     } catch (e) {
+      console.log(e);
       // If failed
       return res.status(500).json({
         message: "Internal Server Error",
@@ -51,12 +53,15 @@ class TransaksiController {
   // Create data
   async create(req, res) {
     try {
+      const dbConnection = client.db("penjualan");
+      const pelanggan = dbConnection.collection("pelanggan");
       // Insert data transaksi
-      let data = await transaksi.insertOne({
-        barang: req.body.barang,
-        pelanggan: req.body.pelanggan,
-        jumlah: req.body.jumlah,
-        total: req.body.total,
+      let data = await pelanggan.insertOne({
+        nama: req.body.nama,
+        photo: req.body.photo && req.body.photo,
+        email: req.body.email,
+        mobile_phone: req.body.mobile_phone,
+        createdAt: new Date(),
       });
 
       // If success
@@ -77,23 +82,26 @@ class TransaksiController {
   // Update data
   async update(req, res) {
     try {
+      const dbConnection = client.db("penjualan");
+      const pelanggan = dbConnection.collection("pelanggan");
       // Update data transaksi
-      await transaksi.updateOne(
+      await pelanggan.updateOne(
         {
           _id: new ObjectId(req.params.id),
         },
         {
           $set: {
-            barang: req.body.barang,
-            pelanggan: req.body.pelanggan,
-            jumlah: req.body.jumlah,
-            total: req.body.total,
+            nama: req.body.nama,
+            photo: req.body.photo && req.body.photo,
+            email: req.body.email,
+            mobile_phone: req.body.mobile_phone,
+            updatedAt: new Date(),
           },
         }
       );
 
       // Find data that updated
-      let data = await transaksi.findOne({
+      let data = await pelanggan.findOne({
         _id: new ObjectId(req.params.id),
       });
 
@@ -114,14 +122,16 @@ class TransaksiController {
   // Delete Data
   async delete(req, res) {
     try {
+      const dbConnection = client.db("penjualan");
+      const pelanggan = dbConnection.collection("pelanggan");
       // delete data depends on req.params.id
-      let data = await transaksi.deleteOne({
+      let data = await pelanggan.deleteOne({
         _id: new ObjectId(req.params.id),
       });
 
       // If success
       return res.status(200).json({
-        message: "Success to delete transaksi",
+        message: `Successfully deleted pelanggan ${req.params.id}`,
       });
     } catch (e) {
       // If failed
@@ -133,4 +143,4 @@ class TransaksiController {
   }
 }
 
-module.exports = new TransaksiController();
+module.exports = new PelangganController();

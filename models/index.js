@@ -13,4 +13,16 @@ try {
   console.log(error)
 }
 
+// Run the connection
+try {
+  connection.connect();
+
+  // If connection succeed
+  console.log("MongoDB connected!");
+} catch (e) {
+  // If connection error
+  console.error(e);
+}
+
+
 module.exports = connection;
