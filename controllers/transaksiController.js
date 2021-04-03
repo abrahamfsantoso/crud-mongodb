@@ -29,6 +29,8 @@ class TransaksiController {
   // Get One Data
   async getOne(req, res) {
     try {
+      const dbConnection = client.db("penjualan");
+      const transaksi = dbConnection.collection("transaksi");
       // Find one data
       let data = await transaksi.findOne({
         _id: new ObjectId(req.params.id),
@@ -40,6 +42,7 @@ class TransaksiController {
         data,
       });
     } catch (e) {
+      console.log(e)
       // If failed
       return res.status(500).json({
         message: "Internal Server Error",
@@ -51,6 +54,8 @@ class TransaksiController {
   // Create data
   async create(req, res) {
     try {
+      const dbConnection = client.db("penjualan");
+      const transaksi = dbConnection.collection("transaksi");
       // Insert data transaksi
       let data = await transaksi.insertOne({
         barang: req.body.barang,
@@ -58,14 +63,14 @@ class TransaksiController {
         jumlah: req.body.jumlah,
         total: req.body.total,
       });
-
+      console.log(data)
       // If success
       return res.status(200).json({
         message: "Success",
         data: data.ops[0],
       });
     } catch (e) {
-      console.log(e);
+      console.log(e)
       // If failed
       return res.status(500).json({
         message: "Internal Server Error",
@@ -77,6 +82,8 @@ class TransaksiController {
   // Update data
   async update(req, res) {
     try {
+      const dbConnection = client.db("penjualan");
+      const transaksi = dbConnection.collection("transaksi");
       // Update data transaksi
       await transaksi.updateOne(
         {
@@ -114,6 +121,8 @@ class TransaksiController {
   // Delete Data
   async delete(req, res) {
     try {
+      const dbConnection = client.db("penjualan");
+      const transaksi = dbConnection.collection("transaksi");
       // delete data depends on req.params.id
       let data = await transaksi.deleteOne({
         _id: new ObjectId(req.params.id),

@@ -7,6 +7,9 @@ const app = express();
 
 const transaksiRoutes = require("./routes/transaksiRoutes");
 const pelangganRoutes = require("./routes/pelangganRoutes");
+const barangRoutes = require("./routes/barangRoutes");
+
+
 
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
@@ -15,6 +18,8 @@ app.use(express.static("public"));
 
 app.use("/transaksi", transaksiRoutes);
 app.use("/pelanggan", pelangganRoutes);
+app.use("/barang", barangRoutes);
+
 
 const PORT = 3000 || process.env.PORT;
 
